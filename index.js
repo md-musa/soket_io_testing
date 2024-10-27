@@ -1,22 +1,19 @@
 const express = require('express');
-const cors = require('cors'); // Import cors
+const cors = require('cors');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
 const app = express();
 
-// Define allowed origins
 const allowedOrigins = [
   'http://localhost:5500',
   'https://location-t.vercel.app',
   'https://playful-nasturtium-ef9858.netlify.app',
 ];
 
-// CORS configuration for Express
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
@@ -29,7 +26,6 @@ app.use(
 
 const server = createServer(app);
 
-// CORS configuration for Socket.IO
 const io = new Server(server, {
   cors: {
     origin: allowedOrigins,
@@ -40,9 +36,8 @@ const io = new Server(server, {
 io.on('connection', socket => {
   console.log('A user connected');
 
-  socket.on('location', message => {
-    console.log(message);
-    io.emit('location', message);
+  socket.on('location', data => {
+    io.emit('location', { id: socket.id, ...data });
   });
 
   socket.on('disconnect', () => {
