@@ -6,7 +6,11 @@ const { Server } = require('socket.io');
 const app = express();
 
 // Define allowed origins
-const allowedOrigins = ['http://localhost:5500', 'https://location-t.vercel.app'];
+const allowedOrigins = [
+  'http://localhost:5500',
+  'https://location-t.vercel.app',
+  'https://playful-nasturtium-ef9858.netlify.app',
+];
 
 // CORS configuration for Express
 app.use(
